@@ -1,0 +1,22 @@
+services:
+  flasky:
+    build: .
+    ports:
+      - "8000:5000"
+    env_file:
+      - .env_file
+    environment:
+      - FLASK_DEBUG=1  # Enable Flask debug mode
+    volumes:
+      - .:/home/flasky  # Mount the current directory to the container's workdir
+      - /home/flasky/venv  # Ensure venv remains inside the container
+
+    links:
+      - mysql:dbserver
+    restart: always
+  
+  mysql:
+    image: "mysql/mysql-server:5.7"
+    env_file:
+      - .env_file-sql
+    restart: always
